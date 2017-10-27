@@ -72,28 +72,33 @@ __powerline() {
         [ -n "$behindN" ] && marks+=" $GIT_NEED_PULL_SYMBOL$behindN"
 
         # print the git branch segment without a trailing newline
-        printf " $GIT_BRANCH_SYMBOL $branch$marks "
+        printf " $GIT_BRANCH_SYMBOL $branch$marks"
     }
 
     ps1() {
         local EXIT=$?
-        local GITINFO=$(__git_info)
         PS1="$RESET"
+
+        # Military time
         local BG=$BG_BASE1
-        PS1+="$BG$FG_BASE3$BOLD\A" #time
+        PS1+="$BG$FG_BASE3$BOLD\A"
         local FG=$FG_BASE1
 
+        # user@host
         BG=$BG_BASE0
-        PS1+="$FG$BG$SEPARATOR$RESET$BG$FG_BASE3 \u@\H " # user@host
+        PS1+="$FG$BG$SEPARATOR$RESET$BG$FG_BASE3 \u@\H"
         FG=$FG_BASE0
 
+        # Path
         local CWD=$(pwd)
         CWD=${CWD/$HOME/\~}
         CWD=${CWD//\// $SEPARATOR_THIN }
         BG=$BG_BASE03
-        PS1+="$FG$BG$SEPARATOR$RESET$BG $CWD " # path
+        PS1+="$FG$BG$SEPARATOR$RESET$BG $CWD"
         FG=$FG_BASE03
 
+        # Git information
+        local GITINFO=$(__git_info)
         if [[ -n "$GITINFO" ]]; then
             BG=$BG_BLUE
             PS1+="$FG$BG$SEPARATOR$FG_BASE3$GITINFO"
